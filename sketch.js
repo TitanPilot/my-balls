@@ -14,8 +14,8 @@ function draw() {
   //for every ball placed
   for (let i = 0; i < balls.length; i++){
     //apply gravity to ball
-    applyGravity(balls[i]);
-
+    moveBall(balls[i]);
+    moveBallOnXAxis(balls[i]);
     //draw ball
     ellipse(balls[i].x,balls[i].relativeY, 20, 20);
 
@@ -34,27 +34,37 @@ function draw() {
 }
 
 function mouseClicked(){
+
+
   //make ball object
-  ballObject = new Ball(mouseX,mouseY);
+  ballObject = new Ball(mouseX,mouseY,50);
 
   //put ball object in ball array
   append(balls,ballObject);
 }
 
 
-function applyGravity(ball){
+function moveBall(ball){
+  //apply gravity
   ball.setRelY(ball.y + (1/2 * g * ball.t * ball.t));
+  //move ball horizontally
+  ball.setX(ball.x + ball.u * ball.t);
   ball.setTime(ball.t + 1);
 }
+
 
 class Ball {
   x = 0;
   y = 0;
+  u = 0;
   t = 0;
+
   relativeY = 0;
-  constructor(x,y) {
+
+  constructor(x,y,u) {
     this.x = x;
     this.y = y;
+    this.u = u;
   }
 
   setRelY(n){
@@ -63,5 +73,9 @@ class Ball {
 
   setTime(n){
     this.t = n;
+  }
+
+  setX(n){
+    this.x = n;
   }
 }
