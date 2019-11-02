@@ -1,8 +1,8 @@
-let g = 0.5;
+let g = -0.5;
 var balls = [];
 
 function setup() {
-  createCanvas(400,500);
+  createCanvas(1500,800);
 }
 function draw() {
   background(0,0,0);
@@ -15,9 +15,8 @@ function draw() {
   for (let i = 0; i < balls.length; i++){
     //apply gravity to ball
     moveBall(balls[i]);
-    moveBallOnXAxis(balls[i]);
     //draw ball
-    ellipse(balls[i].x,balls[i].relativeY, 20, 20);
+    ellipse(balls[i].relativeX,balls[i].relativeY, 20, 20);
 
     //if ball fall out of screen hihi
     if(balls[i].relativeY > height){
@@ -33,11 +32,11 @@ function draw() {
 
 }
 
-function mouseClicked(){
+function mousePressed(){
 
 
   //make ball object
-  ballObject = new Ball(mouseX,mouseY,50);
+  ballObject = new Ball(mouseX,mouseY,0,random(-0.1,0.1));
 
   //put ball object in ball array
   append(balls,ballObject);
@@ -46,25 +45,33 @@ function mouseClicked(){
 
 function moveBall(ball){
   //apply gravity
-  ball.setRelY(ball.y + (1/2 * g * ball.t * ball.t));
+  if (ball.t>0){
+  ball.setRelY(ball.y + (1/2 * ball.g * ball.t * ball.t));
   //move ball horizontally
-  ball.setX(ball.x + ball.u * ball.t);
+  ball.setRelX(ball.x + ball.u * ball.t);
+}else if(ball.t == -500){
+  ball.setRelY(ball.y);
+  ball.setRelX(ball.x);
+}
   ball.setTime(ball.t + 1);
 }
 
 
 class Ball {
+  g = 0;
   x = 0;
   y = 0;
   u = 0;
-  t = 0;
+  t = -500;
 
   relativeY = 0;
+  relativeX = 0;
 
-  constructor(x,y,u) {
+  constructor(x,y,u,g) {
     this.x = x;
     this.y = y;
     this.u = u;
+    this.g = g;
   }
 
   setRelY(n){
@@ -75,7 +82,7 @@ class Ball {
     this.t = n;
   }
 
-  setX(n){
-    this.x = n;
+  setRelX(n){
+    this.relativeX = n;
   }
 }
